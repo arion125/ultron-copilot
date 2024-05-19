@@ -18,6 +18,7 @@ import { startMining } from "./prescripts/startMining";
 import { startCargo } from "./prescripts/startCargo";
 import { startScan } from "./prescripts/startScan";
 import { startCombo } from "./prescripts/startCombo";
+import { startSingle } from "./prescripts/startSingle";
 
 const test = async () => {
   console.log(`Welcome to Ultron Copilot ${version}!`);
@@ -131,6 +132,15 @@ const test = async () => {
         return;
       }
       break;
+
+    case "Single Activity":
+      // 9. Play with single activity
+      const singleActivity = await startSingle(player);
+      if (singleActivity.type !== "Success") {
+          console.log("\nSingle activity failed.", singleActivity.type)
+          return;
+        }
+        break;
 
     default:
       return;
