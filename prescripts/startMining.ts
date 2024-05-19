@@ -7,7 +7,7 @@ import { setMovementTypeV2 } from "../utils/inputsV2/setMovementType";
 import { setResourceToMine } from "../utils/inputsV2/setResourceToMine";
 import { setStarbaseV2 } from "../utils/inputsV2/setStarbase";
 
-export const startMining = async (player: SagePlayer) => {
+export const startMining = async (player: SagePlayer, onlyhere: boolean = false, noLoop: boolean = false) => {
   // 1. set cycles
   const cycles = await setCycles();
 
@@ -63,7 +63,7 @@ export const startMining = async (player: SagePlayer) => {
   // console.log("Fuel needed:", fuelNeeded);
 
   // 7. start mining loop
-  for (let i = 0; i < cycles; i++) {
+  for (let i = 0; ((i < cycles) && (noLoop == false)); i++) {
     const mining = await miningV2(
       fleet.data,
       resourceToMineName.data,
