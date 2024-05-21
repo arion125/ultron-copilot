@@ -24,23 +24,21 @@ export const startSingle = async (player: SagePlayer) => {
       //undock from starbase
       const undock = await actionWrapper(undockFromStarbase, fleet.data);
       if (undock.type !== "Success") {
-          return undock;
+        return undock;
       }
     break;
     case "Dock":
       //Dock starbase
       const dock = await actionWrapper(dockToStarbase, fleet.data);
       if (dock.type !== "Success") {
-          return dock;
+        return dock;
       }
     break;
     case "Start Mining":
-      const mining = await startMining(player, true, true);
+      const mining = await startMining(player, true);
       if (mining.type !== "Success") {
-        console.log("Mining failed.", mining.type)
-        return;
+        return mining;
       }
-      break;
     break;
   }
   

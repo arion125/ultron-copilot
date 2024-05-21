@@ -41,7 +41,7 @@ export const startScan = async (player: SagePlayer) => {
 
   // the fleet is not in a starbase sector
   if (isSameSector && !fleetCurrentSector.hasStarbase) {    
-    const starbase = await setStarbaseV2(fleet.data, true, "Choose the starbase to come back:");
+    const starbase = await setStarbaseV2(fleet.data, true, false, "Choose the starbase to come back:");
     if (starbase.type !== "Success") return starbase;
 
     backStarbaseSector = {

@@ -134,13 +134,13 @@ const test = async () => {
       break;
 
     case "Single Activity":
-      // 9. Play with single activity
+      // 11. Play with single activity
       const singleActivity = await startSingle(player);
       if (singleActivity.type !== "Success") {
-          console.log("\nSingle activity failed.", singleActivity.type)
-          return;
-        }
-        break;
+        console.log("\nSingle activity failed.", singleActivity.type)
+        return;
+      }
+      break;
 
     default:
       return;
