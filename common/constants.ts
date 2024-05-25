@@ -26,7 +26,7 @@ export const profiles = ["Profile 1", "Profile 2", "Profile 3"] as const;
 
 export type Profile = (typeof profiles)[number];
 
-export const activites = ["Mining", "Cargo", "Combo", "Scan"];
+export const activites = ["Mining", "Cargo", "Combo", "Scan", "Combo2"];
 
 export const configDir1 = path.join(homedir(), ".ultronConfig1");
 export const configDir2 = path.join(homedir(), ".ultronConfig2");

@@ -18,6 +18,7 @@ import { startMining } from "./prescripts/startMining";
 import { startCargo } from "./prescripts/startCargo";
 import { startScan } from "./prescripts/startScan";
 import { startCombo } from "./prescripts/startCombo";
+import { startCombo2 } from "./prescripts/startCombo2";
 
 const test = async () => {
   console.log(`Welcome to Ultron Copilot ${version}!`);
@@ -122,6 +123,16 @@ const test = async () => {
         return;
       }
       break;
+
+
+    case "Combo2":
+        // 7. Play with cargo mining
+        const combo2 = await startCombo2(player);
+        if (combo2.type !== "Success") {
+          console.log("Combo failed.", combo2.type)
+          return;
+        }
+        break;
 
     case "Scan":
       // 8. Play with scanning
