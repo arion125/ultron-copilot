@@ -1,5 +1,5 @@
 {
-  "name": "ultron-copilot",
+  "name": "ultron-copilot-gdev",
   "version": "2.0.31.1",
   "module": "index.ts",
   "bin": "./index.js",
