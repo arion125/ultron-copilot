@@ -1,6 +1,6 @@
 {
   "name": "ultron-copilot",
-  "version": "2.0.43",
+  "version": "2.0.44",
   "module": "index.ts",
   "bin": "./index.js",
   "description": "...",
@@ -41,7 +41,7 @@
     "@solana/spl-token": "<=0.4.1",
     "@solana/spl-token-metadata": "<=0.1.2",
     "@solana/web3.js": "<=1.91.4",
-    "rpc-websockets": "7.11.0"
+    "rpc-websockets": "^7.11.0"
   },
   "author": "meta_arion",
   "license": "ISC"
