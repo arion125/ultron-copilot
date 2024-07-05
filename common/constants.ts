@@ -56,7 +56,8 @@ export const verifiedRpc = [
   "solana-mainnet.api.syndica.io",
   "solana-mainnet.quiknode.pro",
   "solana-mainnet.g.alchemy.com",
-  "solana-mainnet.core.chainstack.com"
+  "solana-mainnet.core.chainstack.com",
+  "solana-mainnet.rpc.extrnode.com"
 ];
 
 export enum MovementType {
