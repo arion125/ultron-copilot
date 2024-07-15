@@ -60,6 +60,24 @@ export const cargoV2 = async (
       if(item.resource == ResourceName.Ammo)
       {
         cargotype = CargoPodType.AmmoBank
+        if(amount > 0)
+        {        
+          const loading = await actionWrapper(loadCargo, fleet, item.resource, cargotype, new BN(amount));
+          if (loading.type === "Success")
+          {  
+            effectiveResourcesGo.push(item);
+            const loading2 = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.CargoHold, new BN(amount));
+          }
+        }
+      }
+      else
+      {
+        if(amount > 0)
+        {        
+          const loading = await actionWrapper(loadCargo, fleet, item.resource, cargotype, new BN(amount));
+          if (loading.type === "Success")
+            effectiveResourcesGo.push(item);
+        }
       }
       /*
       else if(item.resource == ResourceName.Fuel)
@@ -73,12 +91,6 @@ export const cargoV2 = async (
         fuelLoaded = amount
       }
       */
-      if(amount > 0)
-      {        
-        const loading = await actionWrapper(loadCargo, fleet, item.resource, cargotype, new BN(amount));
-        if (loading.type === "Success")
-          effectiveResourcesGo.push(item);
-      }
     }
     
     // 4. undock from starbase
@@ -122,7 +134,12 @@ export const cargoV2 = async (
       var amount = new BN(item.amount)
       if(item.resource == ResourceName.Ammo)
       {
-        cargotype = CargoPodType.AmmoBank
+        const unloading = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.AmmoBank, amount); 
+        const unloading2 = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.CargoHold, amount); 
+      }
+      else
+      {
+        const unloading = await actionWrapper(unloadCargo, fleet, item.resource, cargotype, amount); 
       }
       /*
       else if(item.resource == ResourceName.Fuel)
@@ -131,7 +148,6 @@ export const cargoV2 = async (
         amount = fuelLoaded
       }
         */
-      const unloading = await actionWrapper(unloadCargo, fleet, item.resource, cargotype, amount);
     }
 
     
@@ -145,6 +161,24 @@ export const cargoV2 = async (
       if(item.resource == ResourceName.Ammo)
       {
         cargotype = CargoPodType.AmmoBank
+        if(amount > 0)
+        {        
+          const loading = await actionWrapper(loadCargo, fleet, item.resource, cargotype, new BN(amount));
+          if (loading.type === "Success")
+          {  
+            effectiveResourcesBack.push(item);
+            const loading2 = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.CargoHold, new BN(amount));
+          }
+        }
+      }
+      else
+      {
+        if(amount > 0)
+        {  
+          const loading = await actionWrapper(loadCargo, fleet, item.resource, cargotype, new BN(amount));
+          if (loading.type === "Success")
+            effectiveResourcesBack.push(item);
+        }
       }
       
       /*
@@ -159,12 +193,7 @@ export const cargoV2 = async (
         fuelLoaded = amount
       }
         */
-      if(amount > 0)
-      {  
-        const loading = await actionWrapper(loadCargo, fleet, item.resource, cargotype, new BN(amount));
-        if (loading.type === "Success")
-          effectiveResourcesBack.push(item);
-      }
+
     }
 
     // 9. undock from starbase
@@ -200,7 +229,12 @@ export const cargoV2 = async (
       var amount = new BN(item.amount)
       if(item.resource == ResourceName.Ammo)
       {
-        cargotype = CargoPodType.AmmoBank
+        const unloading = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.AmmoBank, amount);  
+        const unloading2 = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.CargoHold, amount);  
+      }
+      else
+      {
+        const unloading = await actionWrapper(unloadCargo, fleet, item.resource, cargotype, amount);  
       }
       /*
       else if(item.resource == ResourceName.Fuel)
@@ -208,8 +242,7 @@ export const cargoV2 = async (
         cargotype = CargoPodType.FuelTank
         amount = fuelLoaded
       }
-        */
-      const unloading = await actionWrapper(unloadCargo, fleet, item.resource, cargotype, amount);    
+        */  
     }
 
     // 13. send notification
