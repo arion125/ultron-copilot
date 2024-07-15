@@ -1,9 +1,9 @@
 {
-  "name": "ultron-copilot",
+  "name": "ultron-copilot-devgiga",
   "version": "2.1.0",
   "module": "index.ts",
   "bin": {
-    "ultron-copilot": "dist-prod/index.js"
+    "ultron-copilot-devgiga": "dist-prod/index.js"
   },
   "description": "...",
   "main": "dist-prod/index.js",
@@ -47,7 +47,7 @@
     "@solana/spl-token-metadata": "<=0.1.2",
     "@solana/web3.js": "<=1.91.4"
   },
-  "author": "meta_arion",
+  "author": "giga899",
   "license": "ISC",
   "repository": {
     "type": "git",
