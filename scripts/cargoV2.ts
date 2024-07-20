@@ -47,9 +47,9 @@ export const cargoV2 = async (
 
     // console.log(fuelTank.loadedAmount.toNumber(), fuelNeeded)
     // 1. load fuel
-    //if (fuelTank.loadedAmount.lt(new BN(fuelNeeded))) {
-    await actionWrapper(loadCargo, fleet, ResourceName.Fuel, CargoPodType.FuelTank, new BN(MAX_AMOUNT));
-    //}
+    if (fuelTank.loadedAmount.lt(new BN(fuelNeeded))) {
+      await actionWrapper(loadCargo, fleet, ResourceName.Fuel, CargoPodType.FuelTank, new BN(MAX_AMOUNT));
+    }
 
     // 2. load cargo go
     const effectiveResourcesGo: InputResourcesForCargo[] = [];
