@@ -59,14 +59,20 @@ export const cargoV2 = async (
       var amount = item.amount
       if(item.resource == ResourceName.Ammo)
       {
-        cargotype = CargoPodType.AmmoBank
         if(amount > 0)
         {        
-          const loading = await actionWrapper(loadCargo, fleet, item.resource, cargotype, new BN(amount));
+          const loading = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.AmmoBank, new BN(amount));
           if (loading.type === "Success")
           {  
             effectiveResourcesGo.push(item);
+          }
+          else
+          {
             const loading2 = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.CargoHold, new BN(amount));
+            if (loading2.type === "Success")
+            {
+              effectiveResourcesGo.push(item);
+            }  
           }
         }
       }
@@ -160,14 +166,20 @@ export const cargoV2 = async (
       var amount = item.amount
       if(item.resource == ResourceName.Ammo)
       {
-        cargotype = CargoPodType.AmmoBank
         if(amount > 0)
         {        
-          const loading = await actionWrapper(loadCargo, fleet, item.resource, cargotype, new BN(amount));
+          const loading = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.AmmoBank, new BN(amount));
           if (loading.type === "Success")
           {  
             effectiveResourcesBack.push(item);
+          }
+          else
+          {
             const loading2 = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.CargoHold, new BN(amount));
+            if (loading2.type === "Success")
+            {
+              effectiveResourcesBack.push(item);
+            }  
           }
         }
       }
