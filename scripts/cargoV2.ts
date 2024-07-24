@@ -66,9 +66,9 @@ export const cargoV2 = async (
           {  
             effectiveResourcesGo.push(item);
           }
-          else
+          if(item.amount > fleet.getAmmoBank().maxCapacity)
           {
-            const loading2 = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.CargoHold, new BN(amount));
+            const loading2 = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.CargoHold, new BN(amount - fleet.getAmmoBank().maxCapacity));
             if (loading2.type === "Success")
             {
               effectiveResourcesGo.push(item);
@@ -173,9 +173,9 @@ export const cargoV2 = async (
           {  
             effectiveResourcesBack.push(item);
           }
-          else
+          if(item.amount > fleet.getAmmoBank().maxCapacity)
           {
-            const loading2 = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.CargoHold, new BN(amount));
+            const loading2 = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.CargoHold, new BN(amount - fleet.getAmmoBank().maxCapacity));
             if (loading2.type === "Success")
             {
               effectiveResourcesBack.push(item);
