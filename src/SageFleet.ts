@@ -200,6 +200,10 @@ export class SageFleet {
       }
     }
 
+    updatefleet(){
+      this.update()
+    }
+
     // !! this function throws an error
     getCurrentSector(): SectorRoute {  
       let coordinates;
@@ -1344,5 +1348,9 @@ export class SageFleet {
     /** END SAGE INSTRUCTIONS */
 }
 
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
 // !! usa più spesso createAssociatedTokenAccountIdempotent
 // !! usa più spesso getAssociatedTokenAddressSync

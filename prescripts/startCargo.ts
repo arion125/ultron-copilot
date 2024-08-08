@@ -40,19 +40,33 @@ export const startCargo = async (player: SagePlayer) => {
   // 5. set fleet movement type (->)
   const movementGo = await setMovementTypeV2("(->)")
 
+  var tempMvmTp = { ...movementGo }; // Crea una copia di movementGo
+  if(movementGo.movement == MovementType.Mixed)
+  {
+    tempMvmTp.movement = MovementType.Warp
+  }
+
   const [goRoute, goFuelNeeded] = fleet.data.calculateRouteToSector(
     fleetCurrentSector.coordinates as SectorCoordinates, 
     sector.data.data.coordinates as SectorCoordinates,
-    movementGo?.movement,
+    tempMvmTp?.movement,
   );
   
   // 6. set fleet movement type (<-) 
   const movementBack = await setMovementTypeV2("(<-)")
 
+  var tempMvmTp = { ...movementBack }; // Crea una copia di movementGo
+  if(movementBack.movement == MovementType.Mixed)
+  {
+    tempMvmTp.movement = MovementType.Warp
+  }
+
+
+
   const [backRoute, backFuelNeeded] = fleet.data.calculateRouteToSector(
     sector.data.data.coordinates as SectorCoordinates, 
     fleetCurrentSector.coordinates as SectorCoordinates,
-    movementBack?.movement,
+    tempMvmTp?.movement,
   );
   
   const fuelNeeded = (goFuelNeeded + Math.round(goFuelNeeded * 0.2)) + (backFuelNeeded + Math.round(backFuelNeeded * 0.2));

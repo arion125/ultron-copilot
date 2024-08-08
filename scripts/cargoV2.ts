@@ -85,18 +85,7 @@ export const cargoV2 = async (
             effectiveResourcesGo.push(item);
         }
       }
-      /*
-      else if(item.resource == ResourceName.Fuel)
-      {
-        cargotype = CargoPodType.FuelTank
-        const maxFuelToLoad = fuelTank.maxCapacity - fuelNeeded
-        if(item.amount > maxFuelToLoad)
-        {
-          amount = maxFuelToLoad
-        }
-        fuelLoaded = amount
-      }
-      */
+
     }
     
     // 4. undock from starbase
@@ -116,6 +105,21 @@ export const cargoV2 = async (
             }
         }
       }   
+    }
+
+    if (movementGo === MovementType.Mixed) {
+      const sectorToInWarp = goRoute[1];
+      const warp = await actionWrapper(warpToSector, fleet, sectorToInWarp, goFuelNeeded,  false);
+      if (warp.type !== "Success") {
+          switch (warp.type){
+            case "FleetIsDocked":
+              await actionWrapper(undockFromStarbase, fleet);
+              return warp
+              break
+          }
+      }
+      const sectorToInSub = goRoute[goRoute.length - 1];
+      const subwarp = await actionWrapper(subwarpToSector, fleet, sectorToInSub, goFuelNeeded);
     }
 
     if (movementGo === MovementType.Subwarp) {
@@ -147,13 +151,6 @@ export const cargoV2 = async (
       {
         const unloading = await actionWrapper(unloadCargo, fleet, item.resource, cargotype, amount); 
       }
-      /*
-      else if(item.resource == ResourceName.Fuel)
-      {
-        cargotype = CargoPodType.FuelTank
-        amount = fuelLoaded
-      }
-        */
     }
 
     
@@ -192,19 +189,6 @@ export const cargoV2 = async (
             effectiveResourcesBack.push(item);
         }
       }
-      
-      /*
-      else if(item.resource == ResourceName.Fuel)
-      {
-        cargotype = CargoPodType.FuelTank
-        const maxFuelToLoad = fuelTank.maxCapacity - fuelNeeded
-        if(item.amount > maxFuelToLoad)
-        {
-          amount = maxFuelToLoad
-        }
-        fuelLoaded = amount
-      }
-        */
 
     }
 
@@ -221,6 +205,21 @@ export const cargoV2 = async (
           return warp;
         }
       }   
+    }
+    
+    if (movementBack === MovementType.Mixed) {
+      const sectorToInWarp = backRoute[1];
+      const warp = await actionWrapper(warpToSector, fleet, sectorToInWarp, backFuelNeeded,  false);
+      if (warp.type !== "Success") {
+          switch (warp.type){
+            case "FleetIsDocked":
+              await actionWrapper(undockFromStarbase, fleet);
+              return warp
+              break
+          }
+      }
+      const sectorToInSub = backRoute[backRoute.length - 1];
+      const subwarp = await actionWrapper(subwarpToSector, fleet, sectorToInSub, backFuelNeeded);
     }
 
     if (movementBack === MovementType.Subwarp) {
@@ -248,13 +247,6 @@ export const cargoV2 = async (
       {
         const unloading = await actionWrapper(unloadCargo, fleet, item.resource, cargotype, amount);  
       }
-      /*
-      else if(item.resource == ResourceName.Fuel)
-      {
-        cargotype = CargoPodType.FuelTank
-        amount = fuelLoaded
-      }
-        */  
     }
 
     // 13. send notification

@@ -64,11 +64,13 @@ export const verifiedRpc = [
 export enum MovementType {
   Warp = "Warp",
   Subwarp = "Subwarp",
+  Mixed = "Mixed",
 }
 
 export const movements = [
   MovementType.Warp,
   MovementType.Subwarp,
+  MovementType.Mixed,
 ]
 
 export enum PriorityLevel {
