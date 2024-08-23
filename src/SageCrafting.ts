@@ -211,7 +211,7 @@ export class SageCrafting {
   async getAvailableCrew(starbase: Starbase) {
     const starbasePlayer = await this.player.getStarbasePlayerByStarbaseAsync(starbase);
     if (starbasePlayer.type !== "Success") return starbasePlayer;
-    const availableCrew = starbasePlayer.data.data.totalCrew - starbasePlayer.data.data.busyCrew;
+    const availableCrew = starbasePlayer.data.data.oldTotalCrew - starbasePlayer.data.data.busyCrew;
     if (availableCrew === 0) return { type: "NoAvailableCrewInStarbase" as const };
     return { type: "Success" as const, data: availableCrew };
   }

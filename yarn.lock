@@ -536,7 +536,7 @@
     "@staratlas/data-source" "^0.7.4"
     "@staratlas/player-profile" "^0.9.1"
 
-"@staratlas/sage@^1.5.0":
+"@staratlas/sage@^1.2.0":
   version "1.5.2"
   resolved "https://registry.npmjs.org/@staratlas/sage/-/sage-1.5.2.tgz"
   integrity sha512-x32GgXFUItA//yOoCEJMzUJ6H/PRPTbPjPOJAh2EXkUweVXBljXrOiLaLydne6+X2CGOQOHFsSEIVg+XHIlXtQ==
