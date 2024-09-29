@@ -110,7 +110,7 @@ export const miningV2 = async (
     }   
   }
 
-  if (movementGo === MovementType.Mixed && goRoute && goFuelNeeded) {
+  if (movementGo && movementGo === MovementType.Mixed && goRoute && goFuelNeeded) {
     const sectorToInWarp = goRoute[1];
     const warp = await actionWrapper(warpToSector, fleet, sectorToInWarp, goFuelNeeded,  false);
     if (warp.type !== "Success") {
