@@ -1,3 +1,4 @@
+import { MovementType } from "../common/constants";
 import { SectorCoordinates } from "../common/types";
 import { miningV2 } from "../scripts/miningV2";
 import { SagePlayer } from "../src/SagePlayer";
@@ -38,25 +39,39 @@ export const startMining = async (player: SagePlayer) => {
   const miningSessionData = fleet.data.getTimeAndNeededResourcesToFullCargoInMining(resourceToMine.data);
 
   let movementGo, movementBack;
+  var tempMvmTpGo
+  var tempMvmTpBack
+
   if (!isSameSector) {
     // 5. set fleet movement type (->)
     movementGo = await setMovementTypeV2("(->)")
 
+    tempMvmTpGo = { ...movementGo }; // Crea una copia di movementGo
+    if(movementGo.movement == MovementType.Mixed)
+    {
+      tempMvmTpGo.movement = MovementType.Warp
+    }
+
     // 6. set fleet movement type (<-) 
     movementBack = await setMovementTypeV2("(<-)")
-  }
 
-  // 5 & 6. calculate routes and fuel needed
+    tempMvmTpBack = { ...movementBack }; // Crea una copia di movementGo
+    if(movementBack.movement == MovementType.Mixed)
+    {
+      tempMvmTpBack.movement = MovementType.Warp
+    }
+  }
+  
   const [goRoute, goFuelNeeded] = fleet.data.calculateRouteToSector(
     fleetCurrentSector.coordinates as SectorCoordinates, 
     sector.data.data.coordinates as SectorCoordinates,
-    movementGo?.movement,
+    tempMvmTpGo?.movement,
   );
-  
+
   const [backRoute, backFuelNeeded] = fleet.data.calculateRouteToSector(
     sector.data.data.coordinates as SectorCoordinates, 
     fleetCurrentSector.coordinates as SectorCoordinates,
-    movementBack?.movement,
+    tempMvmTpBack?.movement,
   );
   
   const fuelNeeded = miningSessionData.fuelNeeded + (goFuelNeeded + Math.round(goFuelNeeded * 0.1)) + (backFuelNeeded + Math.round(backFuelNeeded * 0.1));
