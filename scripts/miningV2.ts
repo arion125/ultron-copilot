@@ -110,6 +110,21 @@ export const miningV2 = async (
     }   
   }
 
+  if (movementGo === MovementType.Mixed && goRoute && goFuelNeeded) {
+    const sectorToInWarp = goRoute[1];
+    const warp = await actionWrapper(warpToSector, fleet, sectorToInWarp, goFuelNeeded,  false);
+    if (warp.type !== "Success") {
+        switch (warp.type){
+          case "FleetIsDocked":
+            await actionWrapper(undockFromStarbase, fleet);
+            return warp
+            break
+        }
+    }
+    const sectorToInSub = goRoute[goRoute.length - 1];
+    const subwarp = await actionWrapper(subwarpToSector, fleet, sectorToInSub, goFuelNeeded);
+  }
+
   if (movementGo && movementGo === MovementType.Subwarp && goRoute && goFuelNeeded) {
     const sectorTo = goRoute[1];
     const subwarp = await actionWrapper(subwarpToSector, fleet, sectorTo, goFuelNeeded);
@@ -190,6 +205,23 @@ export const miningV2 = async (
         }
       }
     }   
+  }
+
+
+    
+  if (movementBack === MovementType.Mixed && backRoute && backFuelNeeded) {
+    const sectorToInWarp = backRoute[1];
+    const warp = await actionWrapper(warpToSector, fleet, sectorToInWarp, backFuelNeeded,  false);
+    if (warp.type !== "Success") {
+        switch (warp.type){
+          case "FleetIsDocked":
+            await actionWrapper(undockFromStarbase, fleet);
+            return warp
+            break
+        }
+    }
+    const sectorToInSub = backRoute[backRoute.length - 1];
+    const subwarp = await actionWrapper(subwarpToSector, fleet, sectorToInSub, backFuelNeeded);
   }
 
   if (movementBack && movementBack === MovementType.Subwarp && backRoute && backFuelNeeded) {
