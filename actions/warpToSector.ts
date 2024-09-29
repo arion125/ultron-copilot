@@ -53,6 +53,11 @@ export const warpToSector = async (
     console.log(`Waiting cooldown for ${fleet.getMovementStats().warpCoolDown} seconds...`);
     await wait(fleet.getMovementStats().warpCoolDown);
     console.log(`Cooldown completed!`);
+    await wait(1);
+    fleet.updatefleet()
+    console.log(`Wait fleet sync`);
+    await wait(30);
+    console.log(`Fleet sync completed`);
   }
   else
   {
