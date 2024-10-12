@@ -5,6 +5,7 @@ import { ResourceName } from "../src/SageGame";
 import { SagePlayer } from "../src/SagePlayer";
 import { setCycles } from "../utils/inputs/setCycles";
 import { setFleetV2 } from "../utils/inputsV2/setFleet";
+import { setLoadFuel } from "../utils/inputsV2/setFuelCargo";
 import { setMovementTypeV2 } from "../utils/inputsV2/setMovementType";
 import { setResourcesAmountV2 } from "../utils/inputsV2/setResourcesAmount";
 import { setStarbaseV2 } from "../utils/inputsV2/setStarbase";
@@ -26,6 +27,14 @@ export const startCargo = async (player: SagePlayer) => {
 
   const sector = player.getSageGame().getSectorByCoords(starbase.data.data.sector as SectorCoordinates);
   if (sector.type !== "Success") return sector;
+
+  // Chiamata alla funzione
+  // Utilizzo della funzione e gestione della risposta
+  let loadUsingFuelCargo = false
+  const boh = await setLoadFuel(true).then(answers => {
+    loadUsingFuelCargo = answers.confirm
+    console.log(answers.confirm); // true o false a seconda della scelta dell'utente
+  });
 
   // 4. set cargo resource allocation
   console.log(`Available resource names: ${Object.keys(ResourceName).join(", ")}`);
@@ -85,6 +94,7 @@ export const startCargo = async (player: SagePlayer) => {
       movementBack.movement,
       backRoute,
       backFuelNeeded,
+      loadUsingFuelCargo
     )
     if (cargo.type !== "Success") {
       return cargo;

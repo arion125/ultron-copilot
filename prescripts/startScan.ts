@@ -1,6 +1,5 @@
 import { MovementType } from "../common/constants";
 import { SectorCoordinates } from "../common/types";
-import { cargoV2 } from "../scripts/cargoV2";
 import { scanV2 } from "../scripts/scanV2";
 import { SectorRoute } from "../src/SageFleet";
 import { SagePlayer } from "../src/SagePlayer";

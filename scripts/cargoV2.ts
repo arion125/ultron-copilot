@@ -24,13 +24,68 @@ export const cargoV2 = async (
   movementBack: MovementType,
   backRoute: SectorRoute[],
   backFuelNeeded: number,
+  useFuelCargo: boolean,
 ) => {
     const fleetCurrentSector = fleet.getCurrentSector();
     if (!fleetCurrentSector) return { type: "FleetCurrentSectorError" as const };
 
     const fuelTank = fleet.getFuelTank();
 
+    let fuelToLoadGO = 0
+    let fuelToLoadBack = 0
+
     if (new BN(fuelNeeded).gt(fuelTank.maxCapacity)) return { type: "NotEnoughFuelCapacity" as const };
+
+    if(useFuelCargo)
+    {
+      //Calculate and check if fuel to load is too much
+      for (const item of resourcesGo) {
+        var cargotype = CargoPodType.CargoHold
+        var amount = item.amount
+        if(item.resource == ResourceName.Fuel && useFuelCargo)
+        {
+          if(amount > 0 )
+          {        
+            fuelToLoadGO = amount
+          }
+        }
+      }
+
+      for (const item of resourcesBack) {
+        var cargotype = CargoPodType.CargoHold
+        var amount = item.amount
+        if(item.resource == ResourceName.Fuel && useFuelCargo)
+        {
+          if(amount > 0 )
+          {        
+            fuelToLoadBack = amount
+          }
+        }
+      }
+
+      if (new BN(fuelToLoadBack + fuelToLoadGO + fuelNeeded).gt(fuelTank.maxCapacity)) 
+      {
+        console.log("Fuel to load is more than available space")
+        if(fuelToLoadBack > 0 && fuelToLoadGO > 0)
+        {
+          return { type: "E da me che voi? Al massimo posso cantarti una canzone" as const };
+        }
+        else if(fuelToLoadBack > 0)
+        {
+          fuelToLoadBack = fuelTank.maxCapacity - fuelNeeded
+          console.log("Override fuel back load to max capacity %d", fuelToLoadBack)
+        }
+        else if(fuelToLoadGO > 0)
+        {
+          fuelToLoadGO = fuelTank.maxCapacity - fuelNeeded
+          console.log("Override fuel go load to max capacity %d", fuelToLoadGO)
+        }
+      }
+      else
+      {
+        console.log("Everything seems ok %d %d", fuelToLoadGO, fuelToLoadBack)
+      }
+    }
 
     // 0. Dock to starbase (optional)
     if (
@@ -48,7 +103,7 @@ export const cargoV2 = async (
     // console.log(fuelTank.loadedAmount.toNumber(), fuelNeeded)
     // 1. load fuel
     if (fuelTank.loadedAmount.lt(new BN(fuelNeeded))) {
-      await actionWrapper(loadCargo, fleet, ResourceName.Fuel, CargoPodType.FuelTank, new BN(MAX_AMOUNT));
+      await actionWrapper(loadCargo, fleet, ResourceName.Fuel, CargoPodType.FuelTank, new BN(fuelNeeded));
     }
 
     // 2. load cargo go
@@ -73,6 +128,17 @@ export const cargoV2 = async (
             {
               effectiveResourcesGo.push(item);
             }  
+          }
+        }
+      }
+      else if(item.resource == ResourceName.Fuel && useFuelCargo)
+      {
+        if(amount > 0 )
+        {        
+          const loading = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.FuelTank, new BN(fuelToLoadGO));
+          if (loading.type === "Success")
+          {  
+            effectiveResourcesGo.push(item);
           }
         }
       }
@@ -147,6 +213,10 @@ export const cargoV2 = async (
         const unloading = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.AmmoBank, amount); 
         const unloading2 = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.CargoHold, amount); 
       }
+      else if(item.resource == ResourceName.Fuel && useFuelCargo)
+      { 
+          const unloading_hold = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.FuelTank, new BN(fuelToLoadGO));
+      }
       else
       {
         const unloading = await actionWrapper(unloadCargo, fleet, item.resource, cargotype, amount); 
@@ -177,6 +247,17 @@ export const cargoV2 = async (
             {
               effectiveResourcesBack.push(item);
             }  
+          }
+        }
+      }
+      else if(item.resource == ResourceName.Fuel && useFuelCargo)
+      {
+        if(amount > 0 )
+        {        
+          const loading = await actionWrapper(loadCargo, fleet, item.resource, CargoPodType.FuelTank, new BN(fuelToLoadBack));
+          if (loading.type === "Success")
+          {  
+            effectiveResourcesBack.push(item);
           }
         }
       }
@@ -242,6 +323,10 @@ export const cargoV2 = async (
       {
         const unloading = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.AmmoBank, amount);  
         const unloading2 = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.CargoHold, amount);  
+      }
+      else if(item.resource == ResourceName.Fuel && useFuelCargo)
+      { 
+          const unloading_hold = await actionWrapper(unloadCargo, fleet, item.resource, CargoPodType.FuelTank, new BN(fuelToLoadBack));
       }
       else
       {
