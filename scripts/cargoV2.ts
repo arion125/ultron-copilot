@@ -202,8 +202,16 @@ export const cargoV2 = async (
     }
 
     // 6. dock to starbase
-    await actionWrapper(dockToStarbase, fleet);
-
+    const dock1 = await actionWrapper(dockToStarbase, fleet);
+    if (dock1.type !== "Success") {
+      switch (dock1.type) {
+        case "FleetIsDocked":
+          break;
+        default:
+          return dock1;
+      }
+    }
+    
     // 7. unload cargo go
     for (const item of effectiveResourcesGo) {
       var cargotype = CargoPodType.CargoHold
@@ -313,7 +321,15 @@ export const cargoV2 = async (
     }
 
     // 11. dock to starbase
-    await actionWrapper(dockToStarbase, fleet);
+    const dock = await actionWrapper(dockToStarbase, fleet);
+    if (dock.type !== "Success") {
+      switch (dock.type) {
+        case "FleetIsDocked":
+          break;
+        default:
+          return dock;
+      }
+    }
 
     // 12. unload cargo back
     for (const item of effectiveResourcesBack) {
