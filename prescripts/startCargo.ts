@@ -78,7 +78,7 @@ export const startCargo = async (player: SagePlayer) => {
     tempMvmTp?.movement,
   );
   
-  const fuelNeeded = (goFuelNeeded + Math.round(goFuelNeeded * 0.1)) + (backFuelNeeded + Math.round(backFuelNeeded * 0.1));
+  const fuelNeeded = (goFuelNeeded + Math.round(goFuelNeeded * 0.2)) + (backFuelNeeded + Math.round(backFuelNeeded * 0.2));
   console.log("Fuel needed:", fuelNeeded);
 
   // 7. start cargo loop
